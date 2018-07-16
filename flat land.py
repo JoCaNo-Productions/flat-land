@@ -144,6 +144,9 @@ class game:
     pass
 
 
+class MainGUI:
+	def __init__(self):
+		tk=Tk()
 
 class GameGUI:
 	def __init__(self):
