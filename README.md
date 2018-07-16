@@ -1,2 +1,3 @@
 # flat-land
-game
+
+2d turn based game
