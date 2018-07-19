@@ -8,9 +8,11 @@ class Player:
         self.name = kwargs.get('name', 'Player')
         self.id = kwargs.get('_id', -1)
         self.loc = kwargs.get('loc', (0,0)) # Location
-        self.health = kwargs.get('health', 0)
+        self.health = kwargs.get('health', 99)
+        self.max_health = kwargs.get('max_health', 99)
         self.attack = kwargs.get('attack', 0)
         self.attack_delay = kwargs.get('attack_delay', 0)
+        self.attack_range = kwargs.get('attack_range', 0)
         self.defence = kwargs.get('defence', 0)
         self.health_regen = kwargs.get('health_regen', 0)
         #a modifiyer for abilities
@@ -26,37 +28,44 @@ class Player:
         #the directory of the image for the char
         self.imagedir='C:\\'
 
+        # Cycle length is # of turns in cycle
         self.buffs = [
-            "health":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength'0 '''cycle length is in turns'''],
-            "attack":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength'0],
-            "attack_delay":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength'0],
-            "defence":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength'0],
-            "health_regen":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength'0],
-            "magic_power":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength'0],
-            "magic_regen":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength'0],
-            "dot":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength'0],
-            "burned":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength'0],
-            "speed":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength'0],
+            "health":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
+            "max_health":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
+            "attack":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
+            "attack_delay":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
+            "attack_range":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
+            "defence":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
+            "health_regen":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
+            "magic_power":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
+            "magic_regen":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
+            "dot":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
+            "burned":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
+            "speed":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
         ]
 
         self.nerfs = [
-            "health":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength'0],
-            "attack":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength'0],
-            "attack_delay":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength'0],
-            "defence":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength'0],
-            "health_regen":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength'0],
-            "magic_power":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength'0],
-            "magic_regen":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength'0],
-            "dot":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength'0],
-            "burned":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength'0],
-            "speed":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength'0],
+            "health":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
+            "max_health":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
+            "attack":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
+            "attack_delay":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
+            "attack_range":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
+            "defence":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
+            "health_regen":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
+            "magic_power":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
+            "magic_regen":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
+            "dot":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
+            "burned":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
+            "speed":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
         ]
     
     def distance(self, loc1, loc2=None):
         '''Player.distance(loc1[, loc2]) -> distance between two locations
         
         loc2 defaults to Player.loc'''
-        pass
+        if loc2 is None:
+            loc2 = self.loc
+        return ((loc1[0]-loc2[0])**2 + (loc1[1]-loc2[1])**2)**0.5
     
     def move(self, loc):
         '''Player.move(loc) -> None
@@ -87,13 +96,13 @@ class Player:
         pass
     
     def __str__(self):
-        return self.name
+        return self.name 
 
 
-class terrain:
+class Terrain:
     def __init__(self):
         self.name = ''
-        self.speedmod = 0.0 # Speed Modifier -- float('inf') makes it impassable
+        self.speedmod = 1.0 # Speed Modifier -- float('inf') makes it impassable
         self.blocks_vision = False
         self.id = 0
 
@@ -103,18 +112,13 @@ class terrain:
         Execute an action each turn.'''
         pass
 
-class game:
+
+class Game:
     def __init__(self):
         #map is a grid which is made of [terrainobj,playerobj]
-        self.map=[[[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None]],
-        [[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None]],\
-        [[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None]],\
-        [[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None]],\
-        [[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None]],\
-        [[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None]],\
-        [[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None]],\
-        [[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None]],\
-        [[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None],[None,None]]]
+        self.map = [
+            [[None, None] for _ in range(9)] for _ in range(9)
+        ]
         #gets map type from user
         self.maptype=self.getmaptype()
         #fills the board with tiles per user request
