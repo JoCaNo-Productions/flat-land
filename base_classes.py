@@ -2,79 +2,59 @@ from tkinter import *
 from random import choice,randint
 import time
 from PIL import Image, ImageTk
+from pathlib import Path
 
-class Player:
+class Champion:
+    # Champion defaults
+    pd = {
+        'health':100, # Hit points
+        'max_health':100, # Max health champion can regen
+        'health_regen':7, # Rate of health regen
+        'defense':3, # Defense against non-magic attacks
+        'dot':0, # Damage Over Time--applied each turn, decremented each time
+        'burned':0, # Permanent damage you can not regen
+        'speed':1, # Movement speed
+        'attack':12, # Damage of regular attacks
+        'attack_range':1, # Range of regular attacks
+        'attack_delay':0, # Delay until regular attacks can be used again
+        'mana':25, # Currency of magic attacks/abilities
+        'max_mana':100, # Max mana champion can regen
+        'mana_regen':7, # Regeneration of mana
+        'magic_mod':1.0, # Multiplier of magic attacks
+        'magic_resist':0.0, # Resistance to others' magic attacks
+    }
+    # Champion attributes
+    attrs = list(pd.keys())
     def __init__(self, **kwargs):
-        self.name = kwargs.get('name', 'Player')
-        self.id = kwargs.get('_id', -1)
+        self.name = kwargs.get('name', 'Champion')
+        self.id = kwargs.get('id', -1)
         self.loc = kwargs.get('loc', (0,0)) # Location
-        self.health = kwargs.get('health', 99)
-        self.max_health = kwargs.get('max_health', 99)
-        self.attack = kwargs.get('attack', 0)
-        self.attack_delay = kwargs.get('attack_delay', 0)
-        self.attack_range = kwargs.get('attack_range', 0)
-        self.defence = kwargs.get('defence', 0)
-        self.health_regen = kwargs.get('health_regen', 0)
-        #a modifiyer for abilities
-        self.magic_power = kwargs.get('magic_power', 0)
-        self.magic_regen = kwargs.get('magic_regen')
-        #a modifiyer for abilities
-        self.magic_resist = kwargs.get('magic_resist', 0)
-        self.mana = kwargs.get('mana', 0) # Currency of magic
-        # DOT is decremented each turn after causing damage
-        self.dot = kwargs.get('dot', 0) # Damage Over Time
-        self.burned = kwargs.get('burned', 0) # Permanent damage
-        self.speed = kwargs.get('speed', 0) # Movement speed
-        #the directory of the image for the char
-        self.imagedir='C:\\'
+        for attr, val in self.__class__.pd.items():
+            setattr(self, '_' + attr, kwargs.get(attr, val))
+        # The directory of the image for the champion
+        self.image_dir = kwargs.get('image_dir', Path.home())
 
-        # Cycle length is # of turns in cycle
-        self.buffs = [
-            "health":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
-            "max_health":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
-            "attack":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
-            "attack_delay":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
-            "attack_range":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
-            "defence":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
-            "health_regen":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
-            "magic_power":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
-            "magic_regen":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
-            "dot":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
-            "burned":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
-            "speed":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
-        ]
-
-        self.nerfs = [
-            "health":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
-            "max_health":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
-            "attack":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
-            "attack_delay":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
-            "attack_range":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
-            "defence":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
-            "health_regen":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
-            "magic_power":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
-            "magic_regen":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
-            "dot":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
-            "burned":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
-            "speed":['amount':0,'forever':True,'amountremovedpercycle':.0,'cyclelength':0],
-        ]
+        # Each list contains a number of Mod()s, aka buffs and nerfs
+        self.mods = {
+            attr:[] for attr in self.__class__.attrs
+        }
     
     def distance(self, loc1, loc2=None):
-        '''Player.distance(loc1[, loc2]) -> distance between two locations
+        '''Champion.distance(loc1[, loc2]) -> distance between two locations
         
-        loc2 defaults to Player.loc'''
+        loc2 defaults to Champion.loc'''
         if loc2 is None:
             loc2 = self.loc
         return ((loc1[0]-loc2[0])**2 + (loc1[1]-loc2[1])**2)**0.5
     
     def move(self, loc):
-        '''Player.move(loc) -> None
+        '''Champion.move(loc) -> None
         
-        Moves player to loc if valid. Raises Exception if illegal move.'''
+        Moves champion to loc if valid. Raises Exception if illegal move.'''
         pass
     
     def attack(self, loc):
-        '''Player.attack(loc) -> None
+        '''Champion.attack(loc) -> None
         
         Attacks space at loc if valid. Raises Exception if illegal attack.'''
         pass
@@ -98,6 +78,20 @@ class Player:
     def __str__(self):
         return self.name 
 
+    def __getattr__(self, attr):
+        if attr not in self.__class__.attrs:
+            return getattr(super(), attr)
+        final = getattr(self, '-' + attr)
+        for mod in sorted(self.mods[attr], key=lambda x:x.priority):
+            final = mod.mod(final)
+        return final
+
+
+class Player:
+    def __init__(self, nick, champ):
+        self.nickname = nick
+        self.champ = champ # Champion
+
 
 class Terrain:
     def __init__(self):
@@ -105,7 +99,6 @@ class Terrain:
         self.speedmod = 1.0 # Speed Modifier -- float('inf') makes it impassable
         self.blocks_vision = False
         self.id = 0
-
     def act(self) -> None:
         '''Terrain.act() -> None
         
@@ -141,6 +134,21 @@ class Game:
         #gets a range of tiles from user
         pass
 
+    def getmaptype(self):
+        pass
+
+    def setupmap(self):
+        pass
+
+    def getplayernum(self):
+        pass
+
+    def championselect(self):
+        pass
+
+    def placechamps(self):
+        pass
+
 
 
 class GameGUI:
@@ -155,7 +163,7 @@ class numberofplayersGUI:
     def __init__(self):
         pass
 
-class playerselectGUI:
+class championselectGUI:
     def __init__(self):
         pass
 
