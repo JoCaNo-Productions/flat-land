@@ -1,7 +1,8 @@
-from typing import Callable
-from base_classes import Player
+from typing import Callable, Type, TypeVar
 
 default = lambda *_: None
+
+Player = TypeVar('Player')
 
 class Mod:
     '''Mod()'s are used to add buffs or nerfs to Player()'s
@@ -15,7 +16,7 @@ class Mod:
                  lifetime: float = 0.0,
                  cycle: int = 1,
                  delay: int = 0,
-                 last_action: Callable[[Player], None] = default,
+                 last_action: Callable[[Type[Player]], None] = default,
                 ):
         self.id = id
         self.priority = priority # the closer to one, the sooner it is applied

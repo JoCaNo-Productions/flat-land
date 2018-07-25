@@ -1,8 +1,8 @@
-from tkinter import *
 from random import choice,randint
 import time
-from PIL import Image, ImageTk
 from pathlib import Path
+
+from mods import Mod
 
 class Champion:
     # Champion defaults
@@ -149,56 +149,3 @@ class Game:
     def placechamps(self):
         pass
 
-
-
-class GameGUI:
-    def __init__(self):
-        pass
-
-class startscreenGUI:
-    def __init__(self):
-        pass
-
-class numberofplayersGUI:
-    def __init__(self):
-        pass
-
-class championselectGUI:
-    def __init__(self):
-        pass
-
-class mapselectorGUI:
-    def __init__(self):
-        pass
-
-game=Game()
-game.main()
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
