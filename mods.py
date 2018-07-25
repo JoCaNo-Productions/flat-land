@@ -9,7 +9,7 @@ class Mod:
     
     Note: this will change to a data class in the future'''
     def __init__(self,
-                 id: int = 0,
+                 Id: int = 0,
                  priority: int = 20,
                  mod: Callable[[float], float] = default,
                  turn: Callable[[], None] = default,
@@ -18,7 +18,7 @@ class Mod:
                  delay: int = 0,
                  last_action: Callable[[Type[Player]], None] = default,
                 ):
-        self.id = id
+        self.id = Id
         self.priority = priority # the closer to one, the sooner it is applied
         self.mod = mod
         self.turn = turn # A function called each turn
