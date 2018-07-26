@@ -7,12 +7,12 @@ from mods import Mod
 class Champion:
     # Champion defaults
     pd = {
-        'health':100, # Hit points
-        'max_health':100, # Max health champion can regen
-        'health_regen':7, # Rate of health regen
+        'health':99, # Hit points
+        'max_health':99, # Max health champion can regen
+        'health_regen':9, # Rate of health regen
         'defense':3, # Defense against non-magic attacks
-        'dot':0, # Damage Over Time--applied each turn, decremented each time
-        'burned':0, # Permanent damage you can not regen
+#        'dot':0, # Damage Over Time--applied each turn, decremented each time
+#        'burned':0, # Permanent damage you can not regen
         'speed':1, # Movement speed
         'attack':12, # Damage of regular attacks
         'attack_range':1, # Range of regular attacks
@@ -25,10 +25,15 @@ class Champion:
     }
     # Champion attributes
     attrs = list(pd.keys())
-    def __init__(self, **kwargs):
+    champs = {}
+    def __init__(self, game, player, **kwargs):
         self.name = kwargs.get('name', 'Champion')
         self.id = kwargs.get('id', -1)
         self.loc = kwargs.get('loc', (0,0)) # Location
+        self.game = game
+        self.player = player
+        self.cooldowns = [0, 0, 0, 0] # Ability cooldowns
+        self.ability_names = [None, None, None, None]
         for attr, val in self.__class__.pd.items():
             setattr(self, '_' + attr, kwargs.get(attr, val))
         # The directory of the image for the champion
@@ -38,6 +43,8 @@ class Champion:
         self.mods = {
             attr:[] for attr in self.__class__.attrs
         }
+
+        self.__class__.champs[self.id] = self
     
     def distance(self, loc1, loc2=None):
         '''Champion.distance(loc1[, loc2]) -> distance between two locations
@@ -81,16 +88,34 @@ class Champion:
     def __getattr__(self, attr):
         if attr not in self.__class__.attrs:
             return getattr(super(), attr)
-        final = getattr(self, '-' + attr)
+        final = getattr(self, '_' + attr)
         for mod in sorted(self.mods[attr], key=lambda x:x.priority):
             final = mod.mod(final)
         return final
 
+    def __setattr__(self, attr, val):
+        if attr not in self.__class__.attrs:
+            setattr(super(), attr, val)
+        setattr(self, '_' + attr, val)
+
+
+class Consumable:
+    pass
+
+
+class Feature:
+    pass
+
 
 class Player:
-    def __init__(self, nick, champ):
+    def __init__(self, nick, game, inven):
         self.nickname = nick
-        self.champ = champ # Champion
+        self.game = game
+        self.champ = None # Champion
+        self.inventory = inven
+
+    def setchamp(self, champ):
+        pass
 
 
 class Terrain:
@@ -128,6 +153,9 @@ class Game:
 
     def selecttile(self):
         #get a tile from user
+        pass
+
+    def selectplayer(self):
         pass
     
     def selectrangeoftiles(self,size):
