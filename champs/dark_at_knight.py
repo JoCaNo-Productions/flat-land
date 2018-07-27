@@ -38,23 +38,43 @@ class DarkAtKnight(Champion):
     def ability2(self):
         '''DarkAtKnight.ability2() -> None
         
-        Mark - 5m. gain a bonus 3 attack and a bonus .1 movement speed
-        towards a player, does stack. one turn cool down.'''
-        pass
+        Ruin - 12m. removes all stacks of mark and and damages a 
+        bonus 10 True Damage per stack, with in a medium Range.'''
+        if self.mana < 12:
+            self.game.alert('Not Enough Mana')
+            return 1
+        if self.cooldowns[1] > 0:
+            self.game.alert(f'{self.ability_names[0]} ability has not cooled down yet')
+            return 2
+        
+        for x in self.marked:
+            if abs(x.loc[0]-self.loc[0])<5 and abs(x.loc[1]-self.loc[1])<5:
+                x.health-=self.marked[x]*10
+                
+        return 0
+        
 
     def ability3(self):
-        '''DarkAtKnight.ability3() -> None
+        '''Bounty - 0m. passive. gain a bonus 5 Mana for ever 
+        stack of mark on a player you kill. note Ruin uses up 
+        marks so they can't be used to for bounty.'''
         
-        Mark - 5m. gain a bonus 3 attack and a bonus .1 movement speed
-        towards a player, does stack. one turn cool down.'''
-        pass
+        #Note: can we have the Mark mod take care of this 
+        #and also should we just return 0 for passives
+        return 0
 
     def ult(self):
         '''DarkAtKnight.ult() -> None
         
-        Mark - 5m. gain a bonus 3 attack and a bonus .1 movement speed
-        towards a player, does stack. one turn cool down.'''
-        pass
+        Ultimate: Shadow Walk - 50m. Become invisible and 
+        becomes untargetable for the next 4 turns and if he 
+        breaks his invisibility by attacking he gains double damage.'''
+        if self.mana < 50:
+            self.game.alert('Not Enough Mana')
+            return 0
+        if self.cooldowns[0] > 0:
+            self.game.alert(f'{self.ability_names[0]} ability has not cooled down yet')
+            return 2
 
 d = {
     'health':300,
