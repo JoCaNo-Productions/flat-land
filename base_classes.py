@@ -158,7 +158,7 @@ class Game:
     def selectplayer(self):
         pass
     
-    def selectrangeoftiles(self,size):
+    def selectrangeoftiles(self,size,userorgame="u",loc1=None,loc2=None):
         #gets a range of tiles from user
         pass
 
