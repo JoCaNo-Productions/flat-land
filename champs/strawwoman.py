@@ -1,3 +1,5 @@
+# Status: Defaults
+
 from base_classes import Champion
 from mods import Mod, dot
 
