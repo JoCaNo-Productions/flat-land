@@ -1,9 +1,7 @@
-<<<<<<< HEAD
+# Status: Being Worked On
+
 from math import atan, cos, sin, pi
 from collections import defaultdict
-=======
-# Status: Being Worked On
->>>>>>> 7c26739fabab6b764b38e9343e4fd3e4c88b104f
 
 from base_classes import Champion
 from mods import Mod, dot
