@@ -24,6 +24,7 @@ class Champion:
 		'mana_regen':7, # Regeneration of mana
 		'magic_mod':1.0, # Multiplier of magic attacks
 		'magic_resist':0.0, # Resistance to others' magic attacks
+		'targetable':True, # True if able to be selected
 	}
 	# Champion attributes
 	attrs = list(pd.keys())
