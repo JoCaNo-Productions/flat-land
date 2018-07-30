@@ -95,6 +95,12 @@ class Champion:
 	def killed(self, dead):
 		pass
 	
+	def channel(self,length=1,action=None):
+		'''when active the champ can't move, attack or use abilities like a stun but self inflicted.
+		action is a function that is run after channeling is done'''
+		pass
+		# Issue: Needs Work (Caleb)
+	
 	def ability1(self,loc):
 		#first abilaty will vary can be passive
 		return ABILITY_NOT_SET
