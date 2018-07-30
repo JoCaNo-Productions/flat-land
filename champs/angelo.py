@@ -11,6 +11,7 @@ class Angelo(Champion):
 		super().__init__(**kwargs)
 		self.tira_forte=0
 		self.grey_health=0
+		self.ult_active=False
 	
 	def damage(self, amount:int, defend: bool=True, magic_attack: bool=False)):
 		health=self.health
@@ -34,9 +35,10 @@ class Angelo(Champion):
 			return 17
 		self.damage(amount=20,defend=False)
 		distance=self.distance(self, target.loc)
-		if distance<=2.5: #if player is close enough to have a guarantee Hit
+		if distance<=2.5 or self.ult_active: #if player is close enough to have a guarantee Hit or ult_active
 			target.damage(amount=15,defend=False)
 			target.damage(amount=self.tira_forte*15,defend=True) 
+			self.ult_active=False
 			# add tira_forte Damage without the true damage stat
 		else: 
 			chance= 2.5/distance #chance of hitting
@@ -85,23 +87,14 @@ class Angelo(Champion):
 			self.health=self.max_health
 
 	def ult(self) -> None:
-		'''classname.ult() -> None
+		'''Angelo.ult() -> None
 		
-		Name - 0m. Desc.'''
-		if self.mana < 0:
-			self.game.alert('Not Enough Mana')
-			return 1
-		if self.cooldowns[0] > 0:
-			self.game.alert(f'{self.ability_names[0]} ability has not cooled down yet')
-			return 2
-		if False: # Check for range
-			self.game.alert("out of range")
-			return 3 # Out of range return value
-		if False:
-			self.game.alert(f'Reached Cap of ___ on player {target.player.nick}')
-			return 4
-		self.health -= 0
-		self.cooldown[0] = 0
+		non è possibile - 200 health.  the next Lungo has inf range.'''
+		if self.health < 201:
+			self.game.alert('Not Enough Health')
+			return 17
+		self.damage(amount=200,defend=False)
+		self.ult_active=True
 		return 0
 
 d = {
