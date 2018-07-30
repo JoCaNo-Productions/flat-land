@@ -1,4 +1,4 @@
-# Status: Defaults
+# Status: Being worked on (Caleb)
 
 from base_classes import Champion
 from mods import Mod, dot
@@ -8,12 +8,14 @@ class classname(Champion):
 		super().__init__(**kwargs)
 	
 	def move(self, loc):
+		#No Default Movment Buffs
 		super().move(loc)
 
 	def ability1(self) -> None:
 		'''classname.ability1() -> None
 		
-		Name - 0m. Desc.'''
+		Lungo Shot - 20 Health every one range past 2.5 the following
+		is the chance of hitting 2/2, 2/3, 2/4, 2/5, ect. 15 True Damage.'''
 		target = self.game.selectplayer()
 		if self.mana < 0:
 			self.game.alert('Not Enough Mana')
@@ -27,7 +29,7 @@ class classname(Champion):
 		if False:
 			self.game.alert(f'Reached Cap of ___ on player {target.player.nick}')
 			return 4
-		self.mana -= 0
+		self.health -= 0
 		self.cooldown[0] = 0
 		return 0
 
@@ -48,7 +50,7 @@ class classname(Champion):
 		if False:
 			self.game.alert(f'Reached Cap of ___ on player {target.player.nick}')
 			return 4
-		self.mana -= 0
+		self.health -= 0
 		self.cooldown[0] = 0
 		return 0
 		
@@ -91,7 +93,7 @@ class classname(Champion):
 		if False:
 			self.game.alert(f'Reached Cap of ___ on player {target.player.nick}')
 			return 4
-		self.mana -= 0
+		self.health -= 0
 		self.cooldown[0] = 0
 		return 0
 
