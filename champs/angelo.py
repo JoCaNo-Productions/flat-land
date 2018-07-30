@@ -9,8 +9,10 @@ from constants import *
 class Angelo(Champion):
 	def __init__(self, **kwargs):
 		super().__init__(**kwargs)
+		self.name = 'Angelo'
 		self.tira_forte=0
 		self.grey_health=0
+		self.ult_id =None
 		self.ult_active=False
 	
 	def damage(self, amount:int, defend: bool=True, magic_attack: bool=False)):
