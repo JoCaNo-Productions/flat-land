@@ -68,7 +68,7 @@ class Champion:
 		pass
 		# Change: Check self.until_move
 	
-	def attack(self, champ):
+	def attack(self, champ, attack=self.attack):
 		'''Champion.attack(champ) -> None
 		
 		Attacks champ if valid. Raises Exception if illegal attack.'''
