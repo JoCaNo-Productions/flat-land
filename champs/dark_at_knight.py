@@ -47,7 +47,7 @@ class DarkAtKnight(Champion):
 			return OUT_OF_RANGE
 		if self.marked[target] >= 7:
 			self.game.alert(f'Reached Cap of Marks on player {target.player.nick}')
-			return 101
+			return REACHED_CAP_STACKS
 		self.mana -= 5
 		self.cooldown[0] = 1
 		self.marked[target] += 1

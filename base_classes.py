@@ -13,8 +13,6 @@ class Champion:
 		'max_health':99, # Max health champion can regen
 		'health_regen':9, # Rate of health regen
 		'defense':3, # Defense against non-magic attacks
-#        'dot':0, # Damage Over Time--applied each turn, decremented each time
-#        'burned':0, # Permanent damage you can not regen
 		'speed':1, # Movement speed
 		'attack':12, # Damage of regular attacks
 		'attack_range':1, # Range of regular attacks
@@ -37,7 +35,7 @@ class Champion:
 		self.player = player
 		self.cooldowns = [0, 0, 0, 0] # Ability cooldowns
 		self.ability_names = [None, None, None, None]
-		self.until_regen = self.until_move = self.until_attack = 
+		self.until_health_regen = self.until_move = self.until_attack = 
 			self.until_visible = self.until_targetable = 0
 		for attr, val in self.__class__.pd.items():
 			setattr(self, '_' + attr, kwargs.get(attr, val))
