@@ -97,7 +97,10 @@ def within_direction(source, target, direct):
 	from source'''
 	#import pdb; from math import atan, tan, sin, cos; pdb.set_trace()
 	# -pi/2 <= angle_of_direct <= 3pi/2
-	angle = atan(direct[0]/direct[1]) + pi*(direct[0]<0)
+	if direct[0] != 0:
+		angle = atan(direct[1]/direct[0]) + pi*(direct[0]<0)
+	else:
+		angle = -pi/2 + pi*(direct[0]<0)
 	# Unit vestors 45 degrees to the left and right of dir
 	a = cos(angle + pi/4), sin(angle + pi/4)
 	b = cos(angle - pi/4), sin(angle - pi/4)
