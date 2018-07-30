@@ -3,7 +3,7 @@ import time
 from pathlib import Path
 from uuid import uuid4
 
-from mods import Mod
+from mods import Mod, no_regen
 from constants import ABILITY_NOT_SET
 
 class Champion:
@@ -36,6 +36,7 @@ class Champion:
 		self.player = player
 		self.cooldowns = [0, 0, 0, 0] # Ability cooldowns
 		self.ability_names = [None, None, None, None]
+		self.until_regen = self.until_move = self.until_attack = 0
 		for attr, val in self.__class__.pd.items():
 			setattr(self, '_' + attr, kwargs.get(attr, val))
 		# The directory of the image for the champion
@@ -45,13 +46,15 @@ class Champion:
 		self.mods = {
 			attr:[] for attr in self.__class__.attrs
 		}
-
+		# "no_regen" mod for after attacks, special abilities, etc.
+		self.mods['health_regen'].append(no_regen(self))
 		self.__class__.champs[self.id] = self
 	
-	def distance(self, loc1, loc2=None):
-		'''Champion.distance(loc1[, loc2]) -> distance between two locations
+	def distance(self, loc1, loc2=None) -> float:
+		'''Champion.distance(loc1[, loc2]) -> float
 		
-		loc2 defaults to Champion.loc'''
+		Return distance between two locations.
+		"loc2" defaults to Champion.loc'''
 		if loc2 is None:
 			loc2 = self.loc
 		return ((loc1[0]-loc2[0])**2 + (loc1[1]-loc2[1])**2)**0.5
@@ -61,12 +64,14 @@ class Champion:
 		
 		Moves champion to loc if valid. Raises Exception if illegal move.'''
 		pass
+		# Change: Check self.until_move
 	
 	def attack(self, loc):
 		'''Champion.attack(loc) -> None
 		
 		Attacks space at loc if valid. Raises Exception if illegal attack.'''
 		pass
+		# Change: Check self.until_attack
 	
 	def damage(self,
 			   amount: int,

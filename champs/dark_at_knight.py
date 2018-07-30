@@ -124,7 +124,6 @@ def mark_speed(champ):
 				increment += marks
 		return x + increment*0.1
 	mod = Mod(
-		champ = champ,
 		priority = 5,
 		mod = modify,
 		lifetime = float('inf')
@@ -140,7 +139,6 @@ def mark_damage(champ):
 				increment += marks
 		return x + increment*3
 	mod = Mod(
-		champ = champ,
 		priority = 5,
 		mod = modify,
 		lifetime = float('inf')
