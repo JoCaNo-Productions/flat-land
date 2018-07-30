@@ -68,13 +68,14 @@ class Champion:
 		pass
 		# Change: Check self.until_move
 	
-	def attack(self, loc):
-		'''Champion.attack(loc) -> None
+	def attack(self, champ):
+		'''Champion.attack(champ) -> None
 		
-		Attacks space at loc if valid. Raises Exception if illegal attack.'''
+		Attacks champ if valid. Raises Exception if illegal attack.'''
 		pass
 		# Change: Check self.until_attack
-	
+		# Issue: I changed loc => champ. look at Angelo. i think that this is the better way.
+ 	
 	def damage(self,
 			   amount: int,
 			   defend: bool=True,
