@@ -17,8 +17,6 @@ class Mod:
 				 mod: Callable[[float], float] = default,
 				 turn: Callable[[], None] = default,
 				 lifetime: float = 0.0,
-				 cycle: int = 1,
-				 delay: int = 0,
 				 last_action: Callable[[Type[Player]], None] = default,
 				):
 		self.id = id if id is not None else uuid4()
@@ -26,8 +24,6 @@ class Mod:
 		self.mod = mod
 		self.turn = turn # A function called each turn
 		self.lifetime = lifetime # number of turns until Mod() expires
-		self.cycle = cycle # number of turns before cycling again
-		self.delay = delay # number of turns until applied--reset to cycle when reaches 0
 		self.last_action = last_action # called when lifetime reaches 0
 
 def dot(champ, start_damage, decrement=1):
