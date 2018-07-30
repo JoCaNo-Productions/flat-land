@@ -14,11 +14,21 @@ class DarkAtKnight(Champion):
 		self.mods['speed'].append(mark_speed(self))
 		self.mods['attack'].append(mark_damage(self))
 		self.direction = [0, 0]
+		self.ult_id # Id of ultimate mod
 		self.marked = defaultdict(int) # Players with marks
 	
 	def move(self, loc):
 		self.direction = [self.loc[0]-loc[0], self.loc[1]-loc[1]]
 		super().move(loc)
+	
+	def attack(self, loc):
+		super().attack(loc)
+		if self.ult_id is not None:
+			for mod in self.mods:
+				if mod.id is self.ult_id:
+					break
+			self.mods.remove(mod)
+			self.ult_id = None
 
 	def ability1(self) -> None:
 		'''DarkAtKnight.ability1() -> None
@@ -39,8 +49,8 @@ class DarkAtKnight(Champion):
 			self.game.alert(f'Reached Cap of Marks on player {target.player.nick}')
 			return 101
 		self.mana -= 5
-		self.marked[target] += 1
 		self.cooldown[0] = 1
+		self.marked[target] += 1
 		return SUCCESS
 
 	def ability2(self):
@@ -85,10 +95,18 @@ class DarkAtKnight(Champion):
 		if self.mana < 50:
 			self.game.alert('Not Enough Mana')
 			return INSUFF_MANA
-		if self.cooldowns[0] > 0:
+		if self.cooldowns[3] > 0:
 			self.game.alert(f'{self.ability_names[0]} ability has not cooled down yet')
 			return ABILITY_NOT_COOLED
-		# ISSUE: Not implemented yet
+		self.mana -= 50
+		self.cooldowns[3] = 4 # ISSUE: Is this 4?
+		self.until_visible = 4
+		self.until_targetable = 4
+		mod = ultimate_attack(self)
+		self.mods['attack'].append(mod)
+		self.ult_id = mod.id
+		return SUCCESS
+
 
 def within_direction(source: list, target: list, direct: int) -> bool:
 	'''within_direction(source: list, target: list, direct: int) -> bool
@@ -113,11 +131,10 @@ def within_direction(source: list, target: list, direct: int) -> bool:
 	direct_a = (direct[0])/a[0]*a[1] - direct[1]
 	direct_b = (direct[0])/b[0]*b[1] - direct[1]
 	return target_a*direct_a > 0 and target_b*direct_b > 0
-	
-	
 
 def mark_speed(champ):
-	assert isinstance(champ, DarkAtKnight), 'Attempt to add mark_speed Mod() to non-DarkAtKnight champ'
+	assert isinstance(champ, DarkAtKnight),
+		'Attempt to add mark_speed Mod() to non-DarkAtKnight champ'
 	def modify(x):
 		increment = 0
 		for target, marks in champ.marked.items():
@@ -132,7 +149,8 @@ def mark_speed(champ):
 	return mod
 
 def mark_damage(champ):
-	assert isinstance(champ, DarkAtKnight), 'Attempt to add mark_damage Mod() to non-DarkAtKnight champ'
+	assert isinstance(champ, DarkAtKnight),
+		'Attempted to add mark_damage Mod() to non-DarkAtKnight champ'
 	def modify(x):
 		increment = 0
 		for target, marks in champ.marked.items():
@@ -146,6 +164,20 @@ def mark_damage(champ):
 	)
 	return mod
 
+def ultimate_attack(champ):
+	assert isinstance(champ, DarkAtKnight),
+		'Attempted to add dark_at_knight.ultimate mod to non-DarkAtKnight champ'
+	def modify(damage):
+		return damage*2
+	def final(_):
+		champ.ult_id = None
+	mod = Mod(
+		priority=32,
+		mod=modify,
+		last_action=final,
+		lifetime=4,
+	)
+	return mod
 
 d = {
 	'health':300,
