@@ -90,12 +90,10 @@ class DarkAtKnight(Champion):
 			return ABILITY_NOT_COOLED
 		# ISSUE: Not implemented yet
 
-def within_direction(source, target, direct):
-	'''within_direction(source, target, direct) -> bool
+def within_direction(source: list, target: list, direct: int) -> bool:
+	'''within_direction(source: list, target: list, direct: int) -> bool
 	
-	Return True if target within 45 degrees of direct(ion) vector
-	from source'''
-	#import pdb; from math import atan, tan, sin, cos; pdb.set_trace()
+	Return True if target within 45 degrees of direct(ion) vector'''
 	# -pi/2 <= angle_of_direct <= 3pi/2
 	if direct[0] != 0:
 		angle = atan(direct[1]/direct[0]) + pi*(direct[0]<0)
