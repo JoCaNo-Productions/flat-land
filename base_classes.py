@@ -36,7 +36,8 @@ class Champion:
 		self.player = player
 		self.cooldowns = [0, 0, 0, 0] # Ability cooldowns
 		self.ability_names = [None, None, None, None]
-		self.until_regen = self.until_move = self.until_attack = 0
+		self.until_regen = self.until_move = self.until_attack = 
+			self.until_visible = self.until_targetable = 0
 		for attr, val in self.__class__.pd.items():
 			setattr(self, '_' + attr, kwargs.get(attr, val))
 		# The directory of the image for the champion
