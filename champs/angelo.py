@@ -1,4 +1,4 @@
-# Status: Being worked on (Caleb)
+# Status: Needs Review (Caleb)
 
 from random import random
 
@@ -37,9 +37,9 @@ class Angelo(Champion):
 		distance=self.distance(self, target.loc)
 		if distance<=2.5 or self.ult_active: #if player is close enough to have a guarantee Hit or ult_active
 			target.damage(amount=15,defend=False)
-			target.damage(amount=self.tira_forte*15,defend=True) 
-			self.ult_active=False
+			target.damage(amount=self.tira_forte*15,defend=True)
 			# add tira_forte Damage without the true damage stat
+			self.ult_active=False
 		else: 
 			chance= 2.5/distance #chance of hitting
 			if random()>chance: 
@@ -98,13 +98,13 @@ class Angelo(Champion):
 		return 0
 
 d = {
-	'health':0,
-	'max_health':0,
-	'health_regen':0,
-	'defense':0,
-	'speed':0,
-	'attack':0,
-	'attack_range':0,
+	'health':565,
+	'max_health':565,
+	'health_regen':10,
+	'defense':5,
+	'speed':2.7,
+	'attack':20,
+	'attack_range':2.5,
 	'attack_delay':0,
 	'mana':0,
 	'max_mana':0,
@@ -113,8 +113,5 @@ d = {
 	'magic_resist':0,
 }
 
-def mod(var): # Return Mod that handles ability
-	pass
-
 def create(): # Return instance of classname, used by champion select
-	return classname(**d)
+	return Angelo(**d)
