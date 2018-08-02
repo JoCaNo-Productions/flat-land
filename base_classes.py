@@ -66,7 +66,7 @@ class Champion:
 		pass
 		# Change: Check self.until_move
 	
-	def attack(self, champ, attack=self.attack):
+	def attack(self, champ):
 		'''Champion.attack(champ) -> None
 		
 		Attacks champ if valid. Raises Exception if illegal attack.'''
@@ -91,10 +91,10 @@ class Champion:
 		self.health -= round(amount)
 		return round(amount)
 
-	def killed(self, dead):
+	def killed(self, dead_champ):
 		pass
 	
-	def channel(self,length=1,action=None):
+	def channel(self, duration=1, action=None):
 		'''when active the champ can't move, attack or use abilities like a stun but self inflicted.
 		action is a function that is run after channeling is done'''
 		pass
