@@ -24,6 +24,7 @@ class Angelo(Champion):
 		self.grey_health += damage
 		return damage
 	
+	# ISSUE: Solidify if attack() returns SUCCESS or the amount of True damage
 	def attack(champ):
 		status = super().attack(champ)
 		if status == SUCCESS:
@@ -131,5 +132,6 @@ d = {
 	'magic_resist':0,
 }
 
-def create(): # Return instance of Angelo, used by champion select
+# Return instance of Angelo, used by champion select
+def create():
 	return Angelo(**d)
