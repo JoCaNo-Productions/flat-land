@@ -38,7 +38,7 @@ class Angelo(Champion):
 		if self.health <= 20:
 			self.game.alert('Not Enough Health')
 			return ANGELO_NOT_ENOUGH_HEALTH # ISSUE: Define this constant and import it
-		self.health -= 20
+		self.damage(amount=20, defend=False)
 		distance = self.distance(target.loc)
 		# If player is close enough to have a guarantee Hit or ult_active
 		if distance <= 2.5 or self.ult_active:
@@ -67,7 +67,7 @@ class Angelo(Champion):
 		if tira_forte >= 4:
 			self.game.alert(f'Reached Cap of tira forte on player {target.player.nick}')
 			return REACHED_CAP_STACKS
-		self.health -= 20
+		self.damage(amount=20, defend=False)
 		self.tira_forte+=1
 		return SUCCESS
 
@@ -99,7 +99,7 @@ class Angelo(Champion):
 		if self.health <= 200:
 			self.game.alert('Not Enough Health')
 			return ANGELO_NOT_ENOUGH_HEALTH
-		self.health -= 200
+		self.damage(amount=200, defend=False)
 		self.ult_active=True
 		return 0
 
