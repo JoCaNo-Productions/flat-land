@@ -2,13 +2,14 @@ from random import choice,randint
 import time
 from pathlib import Path
 from uuid import uuid4
+from math import ceil
 
 from mods import Mod, no_regen
 from constants import ABILITY_NOT_SET
 
 class Champion:
 	# Champion defaults
-	pd = {
+	cd = {
 		'health':99, # Hit points
 		'max_health':99, # Max health champion can regen
 		'health_regen':9, # Rate of health regen
@@ -16,16 +17,22 @@ class Champion:
 		'speed':1, # Movement speed
 		'attack':12, # Damage of regular attacks
 		'attack_range':1, # Range of regular attacks
-		'attack_delay':0, # Delay until regular attacks can be used again
 		'mana':25, # Currency of magic attacks/abilities
 		'max_mana':100, # Max mana champion can regen
 		'mana_regen':7, # Regeneration of mana
 		'magic_mod':1.0, # Multiplier of magic attacks
 		'magic_resist':0.0, # Resistance to others' magic attacks
-		'targetable':True, # True if able to be selected
 	}
+	until_values = [
+		'targetable', # Targetable by attacks and non-passive abilities
+		'visible', # Visible by real-life players
+		'attack', # Can use regular attacks
+		'move', # Can move
+		'health_regen', # Can apply health_regen to health
+		'mana_regen', # Can apply mana_regen to mana
+	]
 	# Champion attributes
-	attrs = list(pd.keys())
+	attrs = list(cd.keys())
 	champs = {}
 	def __init__(self, game, player, **kwargs):
 		self.name = kwargs.get('name', 'Champion')
@@ -35,9 +42,7 @@ class Champion:
 		self.player = player
 		self.cooldowns = [0, 0, 0, 0] # Ability cooldowns
 		self.ability_names = [None, None, None, None]
-		self.until_health_regen = self.until_move = self.until_attack = 
-			self.until_visible = self.until_targetable = 0
-		for attr, val in self.__class__.pd.items():
+		for attr, val in self.__class__.cd.items():
 			setattr(self, '_' + attr, kwargs.get(attr, val))
 		# The directory of the image for the champion
 		self.image_dir = kwargs.get('image_dir', Path.home())
@@ -45,6 +50,9 @@ class Champion:
 		# Each list contains a number of Mod()s, aka buffs and nerfs
 		self.mods = {
 			attr:[] for attr in self.__class__.attrs
+		}
+		self.until = {
+			until:0 for until in self.__class__.until_values
 		}
 		# "no_regen" mod for after attacks, special abilities, etc.
 		self.mods['health_regen'].append(no_regen(self))
@@ -72,7 +80,6 @@ class Champion:
 		Attacks champ if valid. Raises Exception if illegal attack.'''
 		pass
 		# Change: Check self.until_attack
-		# Issue: I changed loc => champ. look at Angelo. i think that this is the better way.
  	
 	def damage(self,
 			   amount: int,
@@ -90,6 +97,33 @@ class Champion:
 				amount *= .25
 		self.health -= round(amount)
 		return round(amount)
+	
+	def end_of_turn(self) -> None:
+		# Apply standard changes to health and mana.
+		if self._health > self.max_health: # Decay extra health
+			self.health -= ceil((self.max_health-self._health)/2)
+		elif self.until['health_regen'] == 0: # Otherwise, regen
+			self.health = min(self._health + self.health_regen, self.max_health)
+		if self._mana > self.max_mana: # Decay extra mana
+			self.mana -= ceil((self.max_mana-self._mana)/2)
+		elif self.until['mana_regen'] == 0: # Otherwise, regen
+			self.mana = min(self._mana + self.mana_regen, self.max_mana)
+		# Update mods
+		remove = []
+		for attr_mods in self.mods:
+			for mod in attr_mods:
+				if mod.lifetime <= 0:
+					remove.append((attr_mods, mod))
+					mod.final_action(self)
+					continue
+				mod.lifetime -= 1
+				mod.turn()
+		for attr_mods, mod in remove:
+			attr_mods.remove(mod)
+		# Update untils
+		for until in self.until.keys():
+			if self.until[until] > 0:
+				self.until[until] -= 1
 
 	def killed(self, dead_champ):
 		pass
