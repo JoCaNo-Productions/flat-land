@@ -30,8 +30,8 @@ class DarkAtKnight(Champion):
 			self.mods.remove(mod)
 			self.ult_id = None
 
-	def ability1(self) -> None:
-		'''DarkAtKnight.ability1() -> None
+	def ability1(self) -> int:
+		'''DarkAtKnight.ability1() -> int
 		
 		Mark - 5m. gain a bonus 3 attack and a bonus .1 movement speed
 		towards a player, does stack. one turn cool down.'''
@@ -53,8 +53,8 @@ class DarkAtKnight(Champion):
 		self.marked[target] += 1
 		return SUCCESS
 
-	def ability2(self):
-		'''DarkAtKnight.ability2() -> None
+	def ability2(self) -> int:
+		'''DarkAtKnight.ability2() -> int
 		
 		Ruin - 12m. removes all stacks of mark and and damages a 
 		bonus 10 True Damage per stack, within a medium Range.'''
@@ -77,8 +77,8 @@ class DarkAtKnight(Champion):
 				# don't forget to remove marks from players
 		return SUCCESS
 
-	def ability3(self):
-		'''DarkAtKnight.ability3() -> None
+	def ability3(self) -> int:
+		'''DarkAtKnight.ability3() -> int
 		
 		Bounty - 0m. passive. gain a bonus 5 Mana for ever 
 		stack of mark on a player you kill. note Ruin uses up 
@@ -86,8 +86,8 @@ class DarkAtKnight(Champion):
 		return PASSIVE
 		# ISSUE: Implement this in self.kill()
 
-	def ult(self):
-		'''DarkAtKnight.ult() -> None
+	def ult(self) -> int:
+		'''DarkAtKnight.ult() -> int
 		
 		Ultimate: Shadow Walk - 50m. Become invisible and 
 		becomes untargetable for the next 4 turns and if he 

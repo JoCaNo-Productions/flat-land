@@ -5,7 +5,7 @@ from uuid import uuid4
 from math import ceil
 
 from mods import Mod, no_regen
-from constants import ABILITY_NOT_SET
+from constants import *
 
 class Champion:
 	# Champion defaults
@@ -34,7 +34,7 @@ class Champion:
 	# Champion attributes
 	attrs = list(cd.keys())
 	champs = {}
-	def __init__(self, game, player, **kwargs):
+	def __init__(self, game, player, **kwargs) -> None:
 		self.name = kwargs.get('name', 'Champion')
 		self.id = kwargs.get('id', uuid4())
 		self.loc = kwargs.get('loc', (0,0)) # Location
@@ -67,7 +67,7 @@ class Champion:
 			loc2 = self.loc
 		return ((loc1[0]-loc2[0])**2 + (loc1[1]-loc2[1])**2)**0.5
 	
-	def move(self, loc):
+	def move(self, loc) -> None:
 		'''Champion.move(loc) -> None
 		
 		Moves champion to loc if valid. Raises Exception if illegal move.'''
@@ -84,7 +84,7 @@ class Champion:
 	def damage(self,
 			   amount: int,
 			   defend: bool=True,
-			   magic_attack: bool=False) -> int: # Add handling of magic resistance
+			   magic_attack: bool=False) -> int:
 		'''Champion.damage(amount: int, defend: bool=True) -> int
 		
 		Damage the champion and return amount of True damage.
@@ -97,8 +97,12 @@ class Champion:
 				amount *= .25
 		self.health -= round(amount)
 		return round(amount)
+		# ISSUE: Add handling of magic resistance (Noah)
 	
 	def end_of_turn(self) -> None:
+		'''Champion.end_of_turn() -> None
+		
+		Update attributes like health that change at the end of each turn'''
 		# Apply standard changes to health and mana.
 		if self._health > self.max_health: # Decay extra health
 			self.health -= ceil((self.max_health-self._health)/2)
@@ -128,26 +132,28 @@ class Champion:
 	def killed(self, dead_champ):
 		pass
 	
-	def channel(self, duration=1, action=None):
-		'''when active the champ can't move, attack or use abilities like a stun but self inflicted.
+	def channel(self, duration=1, action=None) -> None:
+		'''Champion.channel() -> None
+		
+		when active the champ can't move, attack or use abilities like a stun but self inflicted.
 		action is a function that is run after channeling is done'''
 		pass
 		# Issue: Needs Work (Caleb)
 	
-	def ability1(self,loc):
-		#first abilaty will vary can be passive
+	def ability1(self) -> int:
+		'''Champion.ability1() -> int'''
 		return ABILITY_NOT_SET
 	
-	def ability2(self,loc):
-		#second abilaty will vary can be passive
+	def ability2(self) -> int:
+		'''Champion.ability2() -> int'''
 		return ABILITY_NOT_SET
 	
-	def ability3(self,loc):
-		#third abilaty will vary can be passive
+	def ability3(self) -> int:
+		'''Champion.ability3() -> int'''
 		return ABILITY_NOT_SET
 
-	def ult(self):
-		#best abilaty
+	def ult(self) -> int:
+		'''Champion.ult() -> int'''
 		return ABILITY_NOT_SET
 	
 	def __str__(self):

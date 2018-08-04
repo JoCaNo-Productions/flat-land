@@ -30,8 +30,8 @@ class Angelo(Champion):
 		if status == SUCCESS:
 			self.tira_forte = 0
 	
-	def ability1(self) -> None:
-		'''Angelo.ability1() -> None
+	def ability1(self) -> int:
+		'''Angelo.ability1() -> int
 		
 		Lungo Shot - 20 Health every one range past 2.5 the following is 
 		the chance of hitting 2.5/2.5, 2.5/3, 2.5/4, 2.5/5, ect. 15 True Damage.'''
@@ -57,8 +57,8 @@ class Angelo(Champion):
 		self.tira_forte=0
 		return SUCCESS
 
-	def ability2(self) -> None:
-		'''Angelo.ability2() -> None
+	def ability2(self) -> int:
+		'''Angelo.ability2() -> int
 		
 		tira forte - 20 Health every time Angelo uses tira forte
 		before he attacks he may add 15 damage to his attack.'''
@@ -72,8 +72,8 @@ class Angelo(Champion):
 		self.tira_forte+=1
 		return SUCCESS
 
-	def ability3(self) -> None:
-		'''Angelo.ability3() -> None
+	def ability3(self) -> int:
+		'''Angelo.ability3() -> int
 		
 		riposo - 0 health all damage done to Angelo including from abilities
 		is kept in a stat called Grey health. Angelo may channel for one turn
@@ -93,8 +93,8 @@ class Angelo(Champion):
 		if self.health>self.max_health:
 			self.health=self.max_health
 
-	def ult(self) -> None:
-		'''Angelo.ult() -> None
+	def ult(self) -> int:
+		'''Angelo.ult() -> int
 		
 		non è possibile - 200 health.  the next Lungo has inf range.'''
 		if self.health <= 200:
@@ -102,7 +102,7 @@ class Angelo(Champion):
 			return ANGELO_NOT_ENOUGH_HEALTH
 		self.damage(amount=200, defend=False)
 		self.ult_active=True
-		return 0
+		return SUCCESS
 
 def tira_forte_attack(champ):
 	assert isinstance(champ, Angelo), 

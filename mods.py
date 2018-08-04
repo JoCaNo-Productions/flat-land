@@ -14,14 +14,14 @@ class Mod:
 	def __init__(self,
 				 id: int = None,
 				 priority: int = 20,
-				 mod: Callable[[float], float] = default,
+				 mod: Callable[[float], float] = None,
 				 turn: Callable[[], None] = default,
 				 lifetime: float = 0.0,
 				 last_action: Callable[[Type[Player]], None] = default,
 				):
 		self.id = id if id is not None else uuid4()
 		self.priority = priority # the closer to one, the sooner it is applied
-		self.mod = mod
+		self.mod = mod if mod is not None else lambda x: x
 		self.turn = turn # A function called each turn
 		self.lifetime = lifetime # number of turns until Mod() expires
 		self.last_action = last_action # called when lifetime reaches 0
