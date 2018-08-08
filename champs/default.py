@@ -2,98 +2,99 @@
 
 from base_classes import Champion
 from mods import Mod, dot
+from constants import *
 
 class classname(Champion):
-	def __init__(self, **kwargs):
-		super().__init__(**kwargs)
+	def __init__(self, game, player, **kwargs):
+		super().__init__(game, player, **kwargs)
 	
 	def move(self, loc):
 		super().move(loc)
 
-	def ability1(self) -> None:
-		'''classname.ability1() -> None
+	def ability1(self) -> int:
+		'''classname.ability1() -> int
 		
 		Name - 0m. Desc.'''
 		target = self.game.selectplayer()
 		if self.mana < 0:
 			self.game.alert('Not Enough Mana')
-			return 1
+			return INSUFF_MANA
 		if self.cooldowns[0] > 0:
 			self.game.alert(f'{self.ability_names[0]} ability has not cooled down yet')
-			return 2
+			return ABILITY_NOT_COOLED
 		if False: # Check for range
 			self.game.alert("out of range")
-			return 3 # Out of range return value
+			return OUT_OF_RANGE
 		if False:
 			self.game.alert(f'Reached Cap of ___ on player {target.player.nick}')
-			return 4
+			return REACHED_CAP_STACKS
 		self.mana -= 0
 		self.cooldown[0] = 0
-		return 0
+		return SUCCESS
 
-	def ability2(self):
-		'''classname.ability2() -> None
+	def ability2(self) -> int:
+		'''classname.ability2() -> int
 		
 		Name - 0m. Desc.'''
 		target = self.game.selectplayer()
 		if self.mana < 0:
 			self.game.alert('Not Enough Mana')
-			return 1
-		if self.cooldowns[0] > 0:
-			self.game.alert(f'{self.ability_names[0]} ability has not cooled down yet')
-			return 2
+			return INSUFF_MANA
+		if self.cooldowns[1] > 0:
+			self.game.alert(f'{self.ability_names[1]} ability has not cooled down yet')
+			return ABILITY_NOT_COOLED
 		if False: # Check for range
 			self.game.alert("out of range")
-			return 3 # Out of range return value
+			return OUT_OF_RANGE
 		if False:
 			self.game.alert(f'Reached Cap of ___ on player {target.player.nick}')
-			return 4
+			return REACHED_CAP_STACKS
 		self.mana -= 0
-		self.cooldown[0] = 0
-		return 0
+		self.cooldown[1] = 0
+		return SUCCESS
 		
 
-	def ability3(self):
-		'''classname.ability3() -> None
+	def ability3(self) -> int:
+		'''classname.ability3() -> int
 		
 		Name - 0m. Desc.'''
 		target = self.game.selectplayer()
 		if self.mana < 0:
 			self.game.alert('Not Enough Mana')
-			return 1
-		if self.cooldowns[0] > 0:
-			self.game.alert(f'{self.ability_names[0]} ability has not cooled down yet')
-			return 2
+			return INSUFF_MANA
+		if self.cooldowns[2] > 0:
+			self.game.alert(f'{self.ability_names[2]} ability has not cooled down yet')
+			return ABILITY_NOT_COOLED
 		if False: # Check for range
 			self.game.alert("out of range")
-			return 3 # Out of range return value
+			return OUT_OF_RANGE
 		if False:
 			self.game.alert(f'Reached Cap of ___ on player {target.player.nick}')
-			return 4
+			return REACHED_CAP_STACKS
 		self.mana -= 0
-		self.cooldown[0] = 0
-		return 0
+		self.cooldown[2] = 0
+		return SUCCESS
 
-	def ult(self):
-		'''classname.ult() -> None
+	def ult(self) -> int:
+		'''classname.ult() -> int
 		
 		Name - 0m. Desc.'''
 		target = self.game.selectplayer()
 		if self.mana < 0:
 			self.game.alert('Not Enough Mana')
-			return 1
-		if self.cooldowns[0] > 0:
-			self.game.alert(f'{self.ability_names[0]} ability has not cooled down yet')
-			return 2
+			return INSUFF_MANA
+		if self.cooldowns[3] > 0:
+			self.game.alert(f'{self.ability_names[3]} ability has not cooled down yet')
+			return ABILITY_NOT_COOLED
 		if False: # Check for range
 			self.game.alert("out of range")
-			return 3 # Out of range return value
+			return OUT_OF_RANGE
 		if False:
 			self.game.alert(f'Reached Cap of ___ on player {target.player.nick}')
-			return 4
+			return REACHED_CAP_STACKS
 		self.mana -= 0
-		self.cooldown[0] = 0
-		return 0
+		self.cooldown[3] = 0
+		return SUCCESS
 
 d = {
 	'health':0,
@@ -103,7 +104,6 @@ d = {
 	'speed':0,
 	'attack':0,
 	'attack_range':0,
-	'attack_delay':0,
 	'mana':0,
 	'max_mana':0,
 	'mana_regen':0,
@@ -114,5 +114,5 @@ d = {
 def mod(var): # Return Mod that handles ability
 	pass
 
-def create(): # Return instance of classname, used by champion select
-	return classname(**d)
+def create(game, player): # Return instance of classname, used by champion select
+	return classname(game, player, **d)
