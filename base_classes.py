@@ -30,6 +30,8 @@ class Champion:
 		'move', # Can move
 		'health_regen', # Can apply health_regen to health
 		'mana_regen', # Can apply mana_regen to mana
+		'abilities', # can use abilities nonpassives
+		'passives', # can use passive abilities
 	]
 	# Champion attributes
 	attrs = list(cd.keys())
@@ -67,10 +69,12 @@ class Champion:
 			loc2 = self.loc
 		return ((loc1[0]-loc2[0])**2 + (loc1[1]-loc2[1])**2)**0.5
 	
-	def move(self, loc) -> None:
-		'''Champion.move(loc) -> None
+	def move(self, loc, slow=True, fly=False) -> None:
+		'''Champion.move(loc, slow=True) -> None
 		
-		Moves champion to loc if valid. Raises Exception if illegal move.'''
+		Moves champion to loc if valid. Raises Exception if illegal move.
+		slow=True applies speed reductions.
+		fly=True allows moving over impassable terrain'''
 		pass
 		# Change: Check self.until_move
 	
@@ -227,6 +231,9 @@ class Game:
 
 	def select_location(self):
 		#get a location from user
+		pass
+
+	def move_champ(self, champ, eqautions='idon\'tknow'):
 		pass
 
 	def select_player(self):
